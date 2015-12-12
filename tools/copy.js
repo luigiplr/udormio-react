@@ -12,7 +12,6 @@ async function copy() {
 
   await Promise.all([
     ncp('src/public', 'build/public'),
-    ncp('vender', 'build/public/vender'),
     ncp('src/content', 'build/content'),
     ncp('package.json', 'build/package.json'),
   ]);
