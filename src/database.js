@@ -8,24 +8,27 @@ import config from './config';
 
 const dbClient = new elasticsearch.Client({
     host: config.elasticSearch,
-    log: 'trace'
+    log: 'info'
 });
 
+
 class Database {
+
     constructor() {
 
-        this.initialized = false;
+        this.user = {
+            create: this.createUser,
+            validate: this.validateUser
+        };
 
         dbClient.ping(err => {
-            if (!err)
-                this.init()
-                .then(() => {
-                    this.initialized = true;
-                });
+            if (err)
+                return console.error(err)
+            this.initIndices()
         });
     }
 
-    init() {
+    initIndices() {
         return new Promise((resolve, reject) => {
             dbClient.indices.create('users', {
                 "mappings": {
@@ -78,28 +81,31 @@ class Database {
         });
     }
 
-    create(index = false, type = false, id = uuid(), params = false, cbType = 'promise') {
 
-        if (!(index || type || params))
-            return 'ERR: input';
+    validateUser() {
 
-        switch (cbType) {
-            case 'promise':
-                return new Promise((resolve, reject) => {
-                    dbClient.create({
-                        index: index,
-                        type: type,
-                        id: id,
-                        body: params
-                    }, (error, response) => {
-                        if (error)
-                            return reject(error);
-                        resolve(response);
-                    });
-                });
-                break;
-        }
+
     }
+
+    createUser(params) {
+        return this.create('users', 'profile', uuid(), params);
+    }
+
+    create(index, type, id, body) {
+        return new Promise((resolve, reject) => {
+            dbClient.create({
+                index: index,
+                type: type,
+                id: id,
+                body: body
+            }, (error, response) => {
+                if (error)
+                    return reject(error);
+                resolve(response);
+            });
+        });
+    }
+
 
 }
 

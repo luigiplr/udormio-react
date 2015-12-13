@@ -10,10 +10,13 @@ const router = new Router();
 
 router.get('/login', async(req, res, next) => {
     try {
-        const params = req.body;
+        const params = req.query;
         console.log(params);
 
 
+
+
+        console.log(Database.user)
 
         res.status(200).send('Tis okay');
     } catch (err) {
@@ -21,10 +24,11 @@ router.get('/login', async(req, res, next) => {
     }
 });
 
-router.post('/register', async(req, res, next) => {
+router.get('/register', async(req, res, next) => {
     try {
-        const params = req.body;
-        console.log(params);
+        const params = req.query;
+
+        Database.user.create(params)
 
     } catch (err) {
         next(err);
