@@ -23,6 +23,7 @@ router.get('/login', async(req, res, next) => {
 router.get('/register', async(req, res, next) => {
     try {
         const params = req.query;
+
         if (!(params.password || params.email))
             return res.status(200).json({
                 status: 'error',

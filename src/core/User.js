@@ -8,19 +8,19 @@ const scryptParameters = {
 };
 
 class User {
-
     constructor() {
-
         this.password = {
             hash: this.hashPass,
             validate: this.validatePass
         };
-
     }
 
-    hashPass(password, salt) {
+    hashPass(password, email) {
         return new Promise((resolve, reject) => {
-            scrypt.hash(new Buffer(password), scryptParameters, 72, new Buffer(salt), (err, result) => {
+            if (!(password || email))
+                return reject();
+
+            scrypt.hash(new Buffer(password), scryptParameters, 72, new Buffer(email), (err, result) => {
                 if (err)
                     return reject(err);
                 resolve(result.toString('base64'));
@@ -30,11 +30,13 @@ class User {
 
     validatePass(hash, input) {
         return new Promise((resolve, reject) => {
-
+            this.hashPass(input.password, input.email)
+                .then(hashed => {
+                    resolve((hashed === hash));
+                })
+                .catch(reject)
         });
     }
-
-
 }
 
 export
