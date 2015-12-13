@@ -1,5 +1,5 @@
 import React from 'react';
-import Router from 'react-routing/src/Router';
+import { Router } from 'react-routing';
 import http from './core/HttpClient';
 import App from './components/App';
 import ContentPage from './components/ContentPage';
