@@ -9,6 +9,7 @@ class Html extends Component {
     css: PropTypes.string,
     body: PropTypes.string.isRequired,
     entry: PropTypes.string.isRequired,
+    req: PropTypes.object
   };
 
   static defaultProps = {

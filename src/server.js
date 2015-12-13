@@ -1,6 +1,7 @@
 import 'babel-core/polyfill';
 import path from 'path';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 import Router from './routes';
@@ -10,6 +11,12 @@ import assets from './assets.json';
 const server = global.server = express();
 const port = process.env.PORT || 5000;
 server.set('port', port);
+
+
+//
+// Register cookie middleware
+// -----------------------------------------------------------------------------
+server.use(cookieParser())
 
 //
 // Register Node.js middleware
@@ -29,7 +36,7 @@ server.use('/api/credentials', require('./api/credentials'));
 server.get('*', async (req, res, next) => {
   try {
     let statusCode = 200;
-    const data = { title: '', description: '', css: '', body: '', entry: assets.app.js };
+    const data = { title: '', description: '', css: '', body: '', entry: assets.app.js, req: req};
     const css = [];
     const context = {
       insertCss: styles => css.push(styles._getCss()),
@@ -38,7 +45,7 @@ server.get('*', async (req, res, next) => {
       onPageNotFound: () => statusCode = 404,
     };
 
-    await Router.dispatch({ path: req.path, context }, (state, component) => {
+    await Router.dispatch({ path: req.path, context, cookies: req.cookies }, (state, component) => {
       data.body = ReactDOM.renderToString(component);
       data.css = css.join('');
     });

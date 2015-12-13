@@ -13,9 +13,16 @@ const router = new Router(on => {
     return component && <App context={state.context}>{component}</App>;
   });
 
+  on('/profile', async (state) => {
+    console.log(state);
+    //Here we can parse state.cookies & perform validation 
+
+  });
+
   on('/login', async () => <LoginPage />);
 
   on('/register', async () => <RegisterPage />);
+
 
   on('*', async (state) => {
     const content = await http.get(`/api/content?path=${state.path}`);
