@@ -18,13 +18,14 @@ class Database {
 
         this.user = {
             create: this.createUser,
-            validate: this.validateUser
+            validate: this.validateUser,
+            update: this.updateUser
         };
 
         dbClient.ping(err => {
             if (err)
                 return console.error(err)
-            this.initIndices()
+            this.initIndices();
         });
     }
 
@@ -81,14 +82,41 @@ class Database {
         });
     }
 
-
-    validateUser() {
+    updateUser(params) {
 
 
     }
 
+    validateUser(params) {
+        return this.search('users', 'profile', {
+            query: {
+                match: {
+                    email: params.email,
+                    password: params.password
+                }
+            },
+        });
+    }
+
     createUser(params) {
         return this.create('users', 'profile', uuid(), params);
+    }
+
+
+
+
+
+    search(index, body) {
+        return new Promise((resolve, reject) => {
+            dbClient.search({
+                index: index,
+                body: body
+            }, (error, response) => {
+                if (error)
+                    return reject(error);
+                resolve(response);
+            });
+        });
     }
 
     create(index, type, id, body) {
