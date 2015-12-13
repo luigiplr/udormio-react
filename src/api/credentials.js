@@ -13,11 +13,6 @@ router.get('/login', async(req, res, next) => {
         const params = req.query;
         console.log(params);
 
-
-
-
-        console.log(Database.user)
-
         res.status(200).send('Tis okay');
     } catch (err) {
         next(err);

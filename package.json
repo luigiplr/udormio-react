@@ -23,6 +23,7 @@
     "react": "0.14.3",
     "react-dom": "0.14.3",
     "react-routing": "0.0.5",
+    "scrypt": "^5.4.1",
     "source-map-support": "0.4.0",
     "superagent": "1.5.0"
   },
