@@ -23,8 +23,14 @@ router.get('/login', async(req, res, next) => {
 router.get('/register', async(req, res, next) => {
     try {
         const params = req.query;
+        if (!(params.password || params.email))
+            return res.status(200).json({
+                status: 'error',
+                error: 'Required parameters not found'
+            });
 
-        userUtils.password.hash(req.query.password, req.query.email)
+
+        userUtils.password.hash(params.password, params.email)
             .then(hash => {
                 res.status(200).json({
                     status: 'ok',
