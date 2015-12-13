@@ -1,9 +1,11 @@
 import scrypt from 'scrypt';
 import Promise from 'bluebird';
 
-const scryptParameters = scrypt.params(0.1);
-const salt = new Buffer('DkM8rLGgE0CaWuQ6lp5QF6NdqbB9wVs1fTlOKIvHENWK41g3K2fALzgz8Xf4E0Ui');
-
+const scryptParameters = {
+    N: 1,
+    r: 1,
+    p: 1
+};
 
 class User {
 
@@ -14,12 +16,11 @@ class User {
             validate: this.validatePass
         };
 
-
     }
 
-    hashPass(password) {
+    hashPass(password, salt) {
         return new Promise((resolve, reject) => {
-            scrypt.kdf(password, scryptParameters, (err, result) => {
+            scrypt.hash(new Buffer(password), scryptParameters, 72, new Buffer(salt), (err, result) => {
                 if (err)
                     return reject(err);
                 resolve(result.toString('base64'));
@@ -29,11 +30,7 @@ class User {
 
     validatePass(hash, input) {
         return new Promise((resolve, reject) => {
-            scrypt.verifyKdf(hash, new Buffer(input), (err, result) => {
-                if (err)
-                    return reject(err);
-                resolve(result);
-            });
+
         });
     }
 

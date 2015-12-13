@@ -3,8 +3,9 @@ import {
 }
 from 'express';
 import Promise from 'bluebird';
-
 import Database from '../database';
+import userUtils from '../core/User';
+
 
 const router = new Router();
 
@@ -23,7 +24,17 @@ router.get('/register', async(req, res, next) => {
     try {
         const params = req.query;
 
-        Database.user.create(params)
+        userUtils.password.hash(req.query.password, req.query.email)
+            .then(hash => {
+                res.status(200).json({
+                    status: 'ok',
+                    comment: 'yes the hash will be removed in production',
+                    hash: hash
+                });
+            })
+            .catch(next)
+
+        //Database.user.create(params)
 
     } catch (err) {
         next(err);
