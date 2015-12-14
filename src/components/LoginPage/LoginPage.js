@@ -1,23 +1,28 @@
-import React, { Component, PropTypes } from 'react';
+import React, {
+    Component, PropTypes
+}
+from 'react';
 
 class LoginPage extends Component {
 
-  static contextTypes = {
-    onSetTitle: PropTypes.func.isRequired,
-  };
+    static contextTypes = {
+        onSetTitle: PropTypes.func.isRequired,
+    };
 
-  componentWillMount() {
-    this.context.onSetTitle('Log In');
-  }
+    componentWillMount() {
+        this.context.onSetTitle('Log In');
+    }
 
-  render() {
-    return (
-      <div>
-
-      </div>
-    );
-  }
+    render() {
+        console.log('rendering login!')
+        return (
+            <div>
+              Login page
+            </div>
+        );
+    }
 
 }
 
-export default LoginPage;
+export
+default LoginPage;
