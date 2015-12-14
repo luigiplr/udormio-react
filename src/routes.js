@@ -13,9 +13,27 @@ const router = new Router(on => {
     return component && <App context={state.context}>{component}</App>;
   });
 
+
+  on('/', async (state) => {
+    const cookies = state.cookies;
+
+    if(cookies && cookies.sesltok){
+    	console.log(cookies.sesltok)
+
+    	const validToken = await http.post('/api/credentials/login', {
+    		cookie: cookies.sesltok
+    	});
+
+
+ 		return <LoginPage />;
+    } else
+		return <LoginPage />;
+  });
+
+
   on('/profile', async (state) => {
-    console.log(state);
-    //Here we can parse state.cookies & perform validation 
+
+
 
   });
 
@@ -25,7 +43,7 @@ const router = new Router(on => {
 
 
   on('*', async (state) => {
-    const content = await http.get(`/api/content?path=${state.path}`);
+    const content = await http.get('/api/content?path=${state.path}');
     return content && <ContentPage {...content} />;
   });
 
