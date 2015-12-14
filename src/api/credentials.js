@@ -3,18 +3,22 @@ import {
 }
 from 'express';
 import Promise from 'bluebird';
+import bodyParser from 'body-parser';
 import Database from '../database';
 import userUtils from '../core/User';
 
 
 const router = new Router();
 
-router.get('/login', async(req, res, next) => {
+router.post('/login', bodyParser.json(), async(req, res, next) => {
     try {
-        const params = req.query;
+        const params = req.body;
         console.log(params);
 
-        res.status(200).send('Tis okay');
+        res.status(200).json({
+            status: 'ok'
+        });
+
     } catch (err) {
         next(err);
     }
