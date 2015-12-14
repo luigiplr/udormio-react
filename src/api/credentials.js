@@ -13,10 +13,10 @@ const router = new Router();
 router.post('/login', bodyParser.json(), async(req, res, next) => {
     try {
         const params = req.body;
-        console.log(params);
 
         res.status(200).json({
-            status: 'ok'
+            status: 'invalid',
+            ...params
         });
 
     } catch (err) {
@@ -45,7 +45,6 @@ router.get('/register', async(req, res, next) => {
             })
             .catch(next)
 
-        //Database.user.create(params)
 
     } catch (err) {
         next(err);
